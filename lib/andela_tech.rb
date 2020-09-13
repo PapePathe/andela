@@ -37,9 +37,6 @@ module AndelaTech
 
     def next_valid_char?(char)
       last_opening_char = @syntastic.split('').last
-      pp("last -opening-char #{last_opening_char}")
-      pp("next--char #{char} #{char.class}")
-      pp("pair #{PAIRS[last_opening_char.to_sym]} #{last_opening_char.class}")
       PAIRS[last_opening_char.to_sym] == char
     end
   end
