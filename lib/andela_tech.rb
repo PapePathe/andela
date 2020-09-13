@@ -9,46 +9,38 @@ module AndelaTech
     attr_reader :input, :pairs
     def initialize(input)
       @input = input
-      @pairs = { '(': 0, ')': 0, '{': 0, '}': 0, '[': 0, ']': 0 }
       @syntastic = ''
       @syntax = true
     end
 
     def parse
-      # iterate the string
-      # check if each char is part of the pairs hash
-      # count the groups of pairs
-      #  return count.
       input.split('').each do |char|
         guess_tokenized(char)
-        pairs[char.to_sym] = pairs.fetch(char.to_sym, 0) + 1
+        break if @syntax == false
       end
 
-      parsed_pairs
+      @syntax
     end
 
     private
 
-    def parsed_pairs
-      parentheses = pairs.fetch(:')', 0) == pairs.fetch(:')', 0)
-      curly_braces = pairs.fetch(:'{', 0) == pairs.fetch(:'}', 0)
-      brackets = pairs.fetch(:'[', 0) == pairs.fetch(:']', 0)
-
-      pp(parentheses, curly_braces, brackets, pairs)
-      parentheses && curly_braces && brackets && syntax_correct?
-    end
-
-    def syntax_correct?
-      @syntax
-    end
-
     def guess_tokenized(char)
-      @syntax = next_valid_char?(char) unless @syntastic.empty?
-      @syntastic << char unless @syntax
+      if @syntax
+        if PAIRS.keys.include?(char.to_sym)
+          @syntastic << char
+        else
+          @syntax = next_valid_char?(char)
+          @syntastic = (@syntastic.split('') - [@syntastic.split('').last]).join
+        end
+      end
     end
 
     def next_valid_char?(char)
-      true
+      last_opening_char = @syntastic.split('').last
+      pp("last -opening-char #{last_opening_char}")
+      pp("next--char #{char} #{char.class}")
+      pp("pair #{PAIRS[last_opening_char.to_sym]} #{last_opening_char.class}")
+      PAIRS[last_opening_char.to_sym] == char
     end
   end
 end

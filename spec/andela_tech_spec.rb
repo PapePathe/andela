@@ -29,6 +29,7 @@ RSpec.describe AndelaTech::Parser do
       let(:input) { '([])' }
       it { is_expected.to eq(true) }
     end
+
     context '(]' do
       let(:input) { '(]' }
       it { is_expected.to eq(false) }
